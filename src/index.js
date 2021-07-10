@@ -45,7 +45,7 @@ app.post('/users', (request, response) => {
     id : uuidv4(),
     name,
     username,
-    todos: [], 
+    todos: [] 
   });
   // console.log(users);
   return response.status(201).send();
@@ -76,7 +76,7 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
 
   user.todos.push(insertTodo);
 
-  console.log(insertTodo);
+  // console.log(insertTodo);
   return response.status(201).send();
 
 
@@ -84,7 +84,25 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
   
+  const { id } = request.params;
+  const { title, deadline } = request.body;
+  const { user } = request;
   
+  
+  for(indice in users){
+    
+    if(user.todos[indice].id === id){
+      user.todos[indice].title = title;
+      user.todos[indice].deadline = deadline;      
+
+      // console.log(user.todos[indice]);
+      return response.status(201).send();
+    }else{
+      console.log("deu errado!");
+      return response.status(404).send();
+    }
+  }
+
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
